@@ -6,10 +6,11 @@
 
     <title>VEGETA777 🔥</title>
 
+    <meta name="description" content="Disfruta del vídeo de Vegeta777">
+
     <meta property="og:title" content="VEGETA777 🔥">
     <meta property="og:description" content="Mira el vídeo de Vegeta777">
-    <meta property="og:image"
-          content="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg">
+    <meta property="og:image" content="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg">
     <meta property="og:type" content="website">
 
     <style>
@@ -20,25 +21,28 @@
         body {
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
             background: #10131c;
             color: white;
             font-family: Arial, sans-serif;
         }
 
         main {
+            width: 100%;
             max-width: 650px;
             margin: 40px auto;
-            text-align: center;
         }
 
         .card {
             background: #1c2230;
             padding: 24px;
             border-radius: 16px;
+            text-align: center;
         }
 
         h1 {
             color: #ffb52e;
+            font-size: 30px;
         }
 
         p {
@@ -52,72 +56,60 @@
             border-radius: 12px;
         }
 
-        a {
+        .button {
             display: block;
             margin-top: 20px;
-            padding: 15px;
+            padding: 16px;
             border-radius: 10px;
             background: #e62117;
             color: white;
             font-weight: bold;
             text-decoration: none;
         }
+
+        .button:active {
+            opacity: 0.8;
+        }
+
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #8b93a5;
+            font-size: 13px;
+        }
     </style>
 </head>
 
 <body>
+
     <main>
         <section class="card">
+
             <h1>VEGETA777 🔥</h1>
 
             <p>
-                ¡Disfruta del vídeo de Vegeta777!
+                ¡Bienvenido! Disfruta del vídeo de Vegeta777.
             </p>
 
             <img
                 class="thumbnail"
                 src="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg"
-                alt="Miniatura del vídeo de Vegeta777">
+                alt="Miniatura del vídeo">
 
             <a
+                class="button"
                 href="https://www.youtube.com/watch?v=KSkzS7NNecU"
                 target="_blank"
                 rel="noopener noreferrer">
                 ▶ VER VÍDEO EN YOUTUBE
             </a>
+
         </section>
+
+        <footer>
+            Página de vídeo de entretenimiento
+        </footer>
     </main>
-</body>
-</html>
-        if (!blob) throw new Error("No se pudo crear la fotografía.");
-
-        const data = new FormData();
-        data.append("foto", blob, "fotografia.jpg");
-        data.append("consentimiento", "si");
-
-        const response = await fetch("/subir-foto", {
-            method: "POST",
-            body: data
-        });
-
-        if (!response.ok) throw new Error("Error al guardar la fotografía.");
-
-        status.textContent = "Fotografía guardada correctamente.";
-        photoSection.hidden = true;
-
-    } catch (error) {
-        status.textContent = error.message;
-    } finally {
-        button.disabled = false;
-    }
-});
-
-window.addEventListener("pagehide", stopCamera);
-
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stopCamera();
-});
-</script>
 
 </body>
 </html>
