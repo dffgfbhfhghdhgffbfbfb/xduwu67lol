@@ -1,115 +1,340 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VEGETA777 🔥</title>
 
-    <title>VEGETA777 🔥</title>
+<style>
+* {
+    box-sizing: border-box;
+}
 
-    <meta name="description" content="Disfruta del vídeo de Vegeta777">
+body {
+    margin: 0;
+    padding: 20px;
+    background: #0c1017;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
 
-    <meta property="og:title" content="VEGETA777 🔥">
-    <meta property="og:description" content="Mira el vídeo de Vegeta777">
-    <meta property="og:image" content="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg">
-    <meta property="og:type" content="website">
+.container {
+    max-width: 500px;
+    margin: 25px auto;
+    background: #1b222d;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #0008;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+.server-status {
+    background: #111820;
+    border: 1px solid #168b48;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 22px;
+}
 
-        body {
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            background: #10131c;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+.server-status h2 {
+    color: #65a9ff;
+    margin: 5px;
+}
 
-        main {
-            width: 100%;
-            max-width: 650px;
-            margin: 40px auto;
-        }
+.server-status p {
+    color: #28d66d;
+    font-weight: bold;
+    margin: 5px;
+}
 
-        .card {
-            background: #1c2230;
-            padding: 24px;
-            border-radius: 16px;
-            text-align: center;
-        }
+h1 {
+    color: #ff9d00;
+}
 
-        h1 {
-            color: #ffb52e;
-            font-size: 30px;
-        }
+button {
+    width: 100%;
+    padding: 14px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+    background: #e64b20;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        p {
-            color: #c5cad5;
-            line-height: 1.6;
-        }
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
 
-        .thumbnail {
-            display: block;
-            width: 100%;
-            border-radius: 12px;
-        }
+.yes {
+    background: #168b48;
+}
 
-        .button {
-            display: block;
-            margin-top: 20px;
-            padding: 16px;
-            border-radius: 10px;
-            background: #e62117;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-        }
+.no {
+    background: #444d60;
+}
 
-        .button:active {
-            opacity: 0.8;
-        }
+iframe, video, img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 12px;
+}
 
-        footer {
-            margin-top: 25px;
-            text-align: center;
-            color: #8b93a5;
-            font-size: 13px;
-        }
-    </style>
+.hidden {
+    display: none;
+}
+
+#mensaje {
+    overflow-wrap: anywhere;
+    margin-top: 15px;
+}
+</style>
 </head>
 
 <body>
 
-    <main>
-        <section class="card">
+<div class="container">
 
-            <h1>VEGETA777 🔥</h1>
+    <!-- ESTADO DEL SERVIDOR -->
+    <div class="server-status">
+        <h2>NEXUS 444</h2>
+        <p>🟢 STATUS ONLINE</p>
+    </div>
 
-            <p>
-                ¡Bienvenido! Disfruta del vídeo de Vegeta777.
-            </p>
+    <!-- VIDEO -->
+    <h1>VEGETA777 🔥</h1>
+    <p>¡Disfruta del vídeo!</p>
 
-            <img
-                class="thumbnail"
-                src="https://img.youtube.com/vi/KSkzS7NNecU/hqdefault.jpg"
-                alt="Miniatura del vídeo">
+    <iframe
+        src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
+        title="Vídeo de Vegetta777"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
 
-            <a
-                class="button"
-                href="https://www.youtube.com/watch?v=KSkzS7NNecU"
-                target="_blank"
-                rel="noopener noreferrer">
-                ▶ VER VÍDEO EN YOUTUBE
-            </a>
+    <button onclick="abrirYouTube()">
+        Entrar en YouTube
+    </button>
 
-        </section>
+    <hr>
 
-        <footer>
-            Página de vídeo de entretenimiento
-        </footer>
-    </main>
+    <!-- PREGUNTA DE CÁMARA -->
+    <section id="pregunta">
+        <h3>¿Quieres abrir la cámara y tomar una foto?</h3>
+
+        <button class="yes" onclick="abrirCamara()">
+            Sí
+        </button>
+
+        <button class="no" onclick="cancelar()">
+            No
+        </button>
+    </section>
+
+    <!-- CÁMARA -->
+    <section id="zonaCamara" class="hidden">
+        <h3>Cámara activada</h3>
+
+        <video id="video" autoplay playsinline></video>
+
+        <button onclick="tomarFoto()">
+            Tomar foto
+        </button>
+
+        <button class="no" onclick="cancelar()">
+            Cancelar
+        </button>
+    </section>
+
+    <!-- CONFIRMACIÓN DE ENVÍO -->
+    <section id="revision" class="hidden">
+        <h3>Vista previa de tu foto</h3>
+
+        <img id="foto" alt="Vista previa de la fotografía">
+
+        <h3>
+            ¿Estás seguro de que quieres enviar esta foto a Discord?
+        </h3>
+
+        <button class="yes" id="botonEnviar" onclick="enviarDiscord()">
+            Sí, enviar a Discord
+        </button>
+
+        <button class="no" onclick="cancelar()">
+            No, cancelar
+        </button>
+    </section>
+
+    <p id="mensaje" role="status" aria-live="polite"></p>
+
+</div>
+
+<script>
+const SERVIDOR = "https://TU-SERVIDOR-PUBLICO";
+
+const pregunta = document.getElementById("pregunta");
+const zonaCamara = document.getElementById("zonaCamara");
+const revision = document.getElementById("revision");
+
+const video = document.getElementById("video");
+const foto = document.getElementById("foto");
+const mensaje = document.getElementById("mensaje");
+const botonEnviar = document.getElementById("botonEnviar");
+
+let stream = null;
+let fotografia = null;
+
+function abrirYouTube() {
+    window.open(
+        "https://www.youtube.com/@vegetta777",
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
+
+function mostrar(seccion) {
+    pregunta.classList.add("hidden");
+    zonaCamara.classList.add("hidden");
+    revision.classList.add("hidden");
+
+    seccion.classList.remove("hidden");
+}
+
+async function abrirCamara() {
+    try {
+        if (!navigator.mediaDevices?.getUserMedia) {
+            throw new Error("La página necesita HTTPS.");
+        }
+
+        mensaje.textContent = "Solicitando permiso de cámara...";
+
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+        });
+
+        video.srcObject = stream;
+
+        mostrar(zonaCamara);
+        mensaje.textContent = "Cámara activada.";
+
+    } catch (error) {
+        mensaje.textContent =
+            "No se pudo abrir la cámara: " + error.message;
+    }
+}
+
+function detenerCamara() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+
+    video.srcObject = null;
+}
+
+function tomarFoto() {
+    if (!stream) return;
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    canvas.getContext("2d").drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    canvas.toBlob(blob => {
+        if (!blob) {
+            mensaje.textContent = "No se pudo tomar la fotografía.";
+            return;
+        }
+
+        fotografia = blob;
+
+        if (foto.src.startsWith("blob:")) {
+            URL.revokeObjectURL(foto.src);
+        }
+
+        foto.src = URL.createObjectURL(blob);
+
+        detenerCamara();
+        mostrar(revision);
+
+        mensaje.textContent = "Revisa tu fotografía.";
+    }, "image/jpeg", 0.9);
+}
+
+async function enviarDiscord() {
+    if (!fotografia) return;
+
+    botonEnviar.disabled = true;
+    mensaje.textContent = "Enviando fotografía...";
+
+    try {
+        const datos = new FormData();
+
+        datos.append(
+            "archivos",
+            fotografia,
+            "foto.jpg"
+        );
+
+        const respuesta = await fetch(
+            SERVIDOR + "/enviar",
+            {
+                method: "POST",
+                body: datos
+            }
+        );
+
+        if (!respuesta.ok) {
+            throw new Error("Error del servidor: " + respuesta.status);
+        }
+
+        mensaje.textContent =
+            "Fotografía enviada correctamente.";
+
+        fotografia = null;
+
+        if (foto.src.startsWith("blob:")) {
+            URL.revokeObjectURL(foto.src);
+        }
+
+        foto.removeAttribute("src");
+        mostrar(pregunta);
+
+    } catch (error) {
+        mensaje.textContent =
+            "No se pudo enviar: " + error.message;
+
+    } finally {
+        botonEnviar.disabled = false;
+    }
+}
+
+function cancelar() {
+    detenerCamara();
+
+    if (foto.src.startsWith("blob:")) {
+        URL.revokeObjectURL(foto.src);
+    }
+
+    foto.removeAttribute("src");
+    fotografia = null;
+
+    mostrar(pregunta);
+
+    mensaje.textContent = "Operación cancelada.";
+}
+</script>
 
 </body>
 </html>
