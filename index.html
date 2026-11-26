@@ -106,7 +106,7 @@ iframe, video {
 
     <iframe
         src="https://www.youtube-nocookie.com/embed/videoseries?list=UUam8T03EOFBsNdR0thrFHdQ"
-        title="Vídeos de Vegetta777"
+        title="Vídeos de Vegeta777"
         allowfullscreen>
     </iframe>
 
@@ -116,7 +116,7 @@ iframe, video {
         <h3>¿Quieres abrir la cámara y tomar una fotografía?</h3>
 
         <button class="yes" onclick="abrirCamara()">
-            Sí
+            Sí, continuar
         </button>
 
         <button class="no" onclick="cancelar()">
@@ -127,7 +127,7 @@ iframe, video {
     <section id="zonaCamara" class="hidden">
         <h3>Cámara activada</h3>
 
-        <p>Puedes tomar la fotografía cuando quieras.</p>
+        <p>Puedes tomar una fotografía cuando quieras.</p>
 
         <video id="video" autoplay playsinline></video>
 
@@ -142,11 +142,20 @@ iframe, video {
 
     <section id="confirmacion" class="hidden">
 
-        <h3>¿Aceptas enviar esta fotografía para guardarla en el ordenador del administrador?</h3>
+        <h3>Confirmación de envío</h3>
 
-        <p>Se guardará en la carpeta Fotos. No se enviará a Discord.</p>
+        <p>
+            Has tomado una fotografía.
+            ¿Aceptas enviarla al servidor para guardarla?
+        </p>
 
-        <button class="yes" id="botonEnviar" onclick="guardarFoto()">
+        <p>
+            La fotografía no se enviará hasta que pulses
+            expresamente el botón de aceptación.
+        </p>
+
+        <button class="yes" id="botonEnviar"
+            onclick="guardarFoto()">
             Sí, acepto enviar
         </button>
 
@@ -162,10 +171,9 @@ iframe, video {
 
 <script>
 
-// DIRECCIÓN HTTPS DEL SERVIDOR
-const SERVIDOR = "https://TU-SERVIDOR-PUBLICO";
+// DIRECCIÓN HTTPS REAL DEL SERVIDOR
+const SERVIDOR = "https://TU-SERVIDOR.com";
 
-// ELEMENTOS
 const pregunta = document.getElementById("pregunta");
 const zonaCamara = document.getElementById("zonaCamara");
 const confirmacion = document.getElementById("confirmacion");
@@ -249,7 +257,8 @@ function detenerCamara() {
 // TOMAR FOTO
 function tomarFoto() {
     if (!stream || !video.videoWidth) {
-        mensaje.textContent = "La cámara todavía no está preparada.";
+        mensaje.textContent =
+            "La cámara todavía no está preparada.";
         return;
     }
 
@@ -267,9 +276,9 @@ function tomarFoto() {
     );
 
     canvas.toBlob(blob => {
-
         if (!blob) {
-            mensaje.textContent = "No se pudo tomar la fotografía.";
+            mensaje.textContent =
+                "No se pudo tomar la fotografía.";
             return;
         }
 
@@ -285,27 +294,19 @@ function tomarFoto() {
     }, "image/jpeg", 0.9);
 }
 
-// GUARDAR FOTO EN EL ORDENADOR
+// ENVIAR CON CONSENTIMIENTO
 async function guardarFoto() {
-
     if (!fotografia) return;
-
-    const codigo = prompt(
-        "Introduce el código de autorización."
-    );
-
-    if (!codigo) return;
 
     botonEnviar.disabled = true;
 
-    mensaje.textContent = "Enviando fotografía al servidor...";
+    mensaje.textContent = "Enviando fotografía...";
 
     try {
-
         const datos = new FormData();
 
         datos.append(
-            "archivos",
+            "archivo",
             fotografia,
             "fotografia.jpg"
         );
@@ -314,9 +315,6 @@ async function guardarFoto() {
             SERVIDOR + "/guardar",
             {
                 method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + codigo
-                },
                 body: datos
             }
         );
@@ -337,19 +335,16 @@ async function guardarFoto() {
             "✅ Fotografía guardada correctamente.";
 
     } catch (error) {
-
         mensaje.textContent =
-            "❌ No se pudo guardar: " + error.message;
+            "❌ No se pudo enviar: " + error.message;
 
     } finally {
-
         botonEnviar.disabled = false;
     }
 }
 
 // CANCELAR
 function cancelar() {
-
     detenerCamara();
 
     fotografia = null;
