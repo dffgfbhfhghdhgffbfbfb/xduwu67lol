@@ -50,7 +50,11 @@ button {
     cursor: pointer;
 }
 
-button:disabled { opacity: .5; cursor: not-allowed; }
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
 .yes { background: #168b48; }
 .no { background: #444d60; }
 
@@ -75,7 +79,7 @@ iframe, video {
 
     <div class="server-status">
         <h2>NEXUS 444</h2>
-        <p id="estado">🟡 COMPROBANDO SERVIDOR...</p>
+        <p id="estado">🟡 SERVIDOR SIN CONFIGURAR</p>
     </div>
 
     <h1>VEGETA777 🔥</h1>
@@ -105,12 +109,9 @@ iframe, video {
 
     <section id="confirmacion" class="hidden">
         <h3>¿Estás seguro de que quieres enviar la fotografía?</h3>
-        <p>
-            La fotografía se enviará al servidor para guardarla
-            en la carpeta Fotos.
-        </p>
-        <button class="yes" id="botonEnviar" onclick="guardarFoto()">
-            Sí, enviar fotografía
+        <p>Se enviará al servidor para guardarla.</p>
+        <button class="yes" onclick="confirmarEnvio()">
+            Sí, acepto enviar
         </button>
         <button class="no" onclick="cancelar()">
             No, cancelar
@@ -121,7 +122,12 @@ iframe, video {
 </div>
 
 <script>
-const SERVIDOR = "https://TU-SERVIDOR.com";
+/*
+  CONFIGURACIÓN:
+  GitHub Pages aloja esta web.
+  El backend Python necesita una dirección HTTPS independiente.
+*/
+const SERVIDOR = "";
 
 const pregunta = document.getElementById("pregunta");
 const zonaCamara = document.getElementById("zonaCamara");
@@ -129,7 +135,6 @@ const confirmacion = document.getElementById("confirmacion");
 const video = document.getElementById("video");
 const mensaje = document.getElementById("mensaje");
 const estado = document.getElementById("estado");
-const botonEnviar = document.getElementById("botonEnviar");
 
 let stream = null;
 let fotografia = null;
@@ -142,14 +147,23 @@ function mostrar(seccion) {
 }
 
 async function comprobarServidor() {
+    if (!SERVIDOR) {
+        estado.textContent = "🟡 FALTA CONFIGURAR EL BACKEND";
+        return;
+    }
+
     try {
-        const respuesta = await fetch(SERVIDOR + "/");
+        const respuesta = await fetch(
+            SERVIDOR.replace(/\/+$/, "") + "/"
+        );
+
         if (!respuesta.ok) throw new Error();
 
         const datos = await respuesta.json();
         estado.textContent = datos.status === "online"
             ? "🟢 SERVER ONLINE"
-            : "🟡 SERVER DESCONOCIDO";
+            : "🔴 SERVER OFFLINE";
+
     } catch {
         estado.textContent = "🔴 SERVER OFFLINE";
     }
@@ -173,8 +187,10 @@ async function abrirCamara() {
         video.srcObject = stream;
         mostrar(zonaCamara);
         mensaje.textContent = "Cámara activada.";
+
     } catch (error) {
-        mensaje.textContent = "No se pudo abrir la cámara: " + error.message;
+        mensaje.textContent =
+            "No se pudo abrir la cámara: " + error.message;
     }
 }
 
@@ -210,40 +226,21 @@ function tomarFoto() {
         detenerCamara();
         mostrar(confirmacion);
 
-        mensaje.textContent = "Fotografía tomada. Esperando tu decisión.";
+        mensaje.textContent = "Fotografía tomada. Esperando confirmación.";
     }, "image/jpeg", 0.9);
 }
 
-async function guardarFoto() {
+function confirmarEnvio() {
     if (!fotografia) return;
 
-    botonEnviar.disabled = true;
-    mensaje.textContent = "Enviando fotografía...";
-
-    try {
-        const datos = new FormData();
-        datos.append("archivo", fotografia, "fotografia.jpg");
-
-        const respuesta = await fetch(SERVIDOR + "/guardar", {
-            method: "POST",
-            body: datos
-        });
-
-        const resultado = await respuesta.json();
-
-        if (!respuesta.ok) {
-            throw new Error(resultado.error || "Error al guardar");
-        }
-
-        fotografia = null;
-        mostrar(pregunta);
-        mensaje.textContent = "✅ Fotografía guardada correctamente.";
-
-    } catch (error) {
-        mensaje.textContent = "❌ No se pudo enviar: " + error.message;
-    } finally {
-        botonEnviar.disabled = false;
+    if (!SERVIDOR) {
+        mensaje.textContent =
+            "El servidor todavía no está configurado. No se ha enviado nada.";
+        return;
     }
+
+    mensaje.textContent =
+        "Falta configurar y verificar el servicio de recepción.";
 }
 
 function cancelar() {
@@ -253,5 +250,6 @@ function cancelar() {
     mensaje.textContent = "Operación cancelada.";
 }
 </script>
+
 </body>
 </html>
