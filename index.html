@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,7 +13,7 @@
 
 body {
     margin: 0;
-    padding: 20px;
+    padding: 18px;
     background: #0c1017;
     color: white;
     font-family: Arial, sans-serif;
@@ -21,11 +22,10 @@ body {
 
 .container {
     max-width: 500px;
-    margin: 25px auto;
-    background: #1b222d;
+    margin: 20px auto;
     padding: 20px;
+    background: #1b222d;
     border-radius: 15px;
-    box-shadow: 0 0 20px #0008;
 }
 
 .server-status {
@@ -38,13 +38,11 @@ body {
 
 .server-status h2 {
     color: #65a9ff;
-    margin: 5px;
 }
 
-.server-status p {
-    color: #28d66d;
+#estado {
     font-weight: bold;
-    margin: 5px;
+    color: #ffcc55;
 }
 
 h1 {
@@ -55,7 +53,7 @@ button {
     width: 100%;
     padding: 14px;
     margin: 8px 0;
-    border: none;
+    border: 0;
     border-radius: 8px;
     background: #e64b20;
     color: white;
@@ -76,10 +74,11 @@ button:disabled {
     background: #444d60;
 }
 
-iframe, video, img {
+iframe, video {
     width: 100%;
     border-radius: 10px;
     margin-top: 12px;
+    border: 0;
 }
 
 .hidden {
@@ -87,8 +86,8 @@ iframe, video, img {
 }
 
 #mensaje {
-    overflow-wrap: anywhere;
     margin-top: 15px;
+    overflow-wrap: anywhere;
 }
 </style>
 </head>
@@ -97,32 +96,24 @@ iframe, video, img {
 
 <div class="container">
 
-    <!-- ESTADO DEL SERVIDOR -->
     <div class="server-status">
         <h2>NEXUS 444</h2>
-        <p>🟢 STATUS ONLINE</p>
+        <p id="estado">🟡 COMPROBANDO SERVIDOR...</p>
     </div>
 
-    <!-- VIDEO -->
     <h1>VEGETA777 🔥</h1>
-    <p>¡Disfruta del vídeo!</p>
+    <p>Disfruta del vídeo</p>
 
     <iframe
-        src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
-        title="Vídeo de Vegetta777"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        src="https://www.youtube-nocookie.com/embed/videoseries?list=UUam8T03EOFBsNdR0thrFHdQ"
+        title="Vídeos de Vegetta777"
         allowfullscreen>
     </iframe>
 
-    <button onclick="abrirYouTube()">
-        Entrar en YouTube
-    </button>
-
     <hr>
 
-    <!-- PREGUNTA DE CÁMARA -->
     <section id="pregunta">
-        <h3>¿Quieres abrir la cámara y tomar una foto?</h3>
+        <h3>¿Quieres abrir la cámara y tomar una fotografía?</h3>
 
         <button class="yes" onclick="abrirCamara()">
             Sí
@@ -133,14 +124,15 @@ iframe, video, img {
         </button>
     </section>
 
-    <!-- CÁMARA -->
     <section id="zonaCamara" class="hidden">
         <h3>Cámara activada</h3>
+
+        <p>Puedes tomar la fotografía cuando quieras.</p>
 
         <video id="video" autoplay playsinline></video>
 
         <button onclick="tomarFoto()">
-            Tomar foto
+            Tomar fotografía
         </button>
 
         <button class="no" onclick="cancelar()">
@@ -148,23 +140,20 @@ iframe, video, img {
         </button>
     </section>
 
-    <!-- CONFIRMACIÓN DE ENVÍO -->
-    <section id="revision" class="hidden">
-        <h3>Vista previa de tu foto</h3>
+    <section id="confirmacion" class="hidden">
 
-        <img id="foto" alt="Vista previa de la fotografía">
+        <h3>¿Aceptas enviar esta fotografía para guardarla en el ordenador del administrador?</h3>
 
-        <h3>
-            ¿Estás seguro de que quieres enviar esta foto a Discord?
-        </h3>
+        <p>Se guardará en la carpeta Fotos. No se enviará a Discord.</p>
 
-        <button class="yes" id="botonEnviar" onclick="enviarDiscord()">
-            Sí, enviar a Discord
+        <button class="yes" id="botonEnviar" onclick="guardarFoto()">
+            Sí, acepto enviar
         </button>
 
         <button class="no" onclick="cancelar()">
             No, cancelar
         </button>
+
     </section>
 
     <p id="mensaje" role="status" aria-live="polite"></p>
@@ -172,40 +161,60 @@ iframe, video, img {
 </div>
 
 <script>
+
+// DIRECCIÓN HTTPS DEL SERVIDOR
 const SERVIDOR = "https://TU-SERVIDOR-PUBLICO";
 
+// ELEMENTOS
 const pregunta = document.getElementById("pregunta");
 const zonaCamara = document.getElementById("zonaCamara");
-const revision = document.getElementById("revision");
+const confirmacion = document.getElementById("confirmacion");
 
 const video = document.getElementById("video");
-const foto = document.getElementById("foto");
 const mensaje = document.getElementById("mensaje");
+const estado = document.getElementById("estado");
 const botonEnviar = document.getElementById("botonEnviar");
 
 let stream = null;
 let fotografia = null;
 
-function abrirYouTube() {
-    window.open(
-        "https://www.youtube.com/@vegetta777",
-        "_blank",
-        "noopener,noreferrer"
-    );
-}
-
+// CAMBIAR SECCIÓN
 function mostrar(seccion) {
     pregunta.classList.add("hidden");
     zonaCamara.classList.add("hidden");
-    revision.classList.add("hidden");
+    confirmacion.classList.add("hidden");
 
     seccion.classList.remove("hidden");
 }
 
+// COMPROBAR SERVIDOR
+async function comprobarServidor() {
+    try {
+        const respuesta = await fetch(SERVIDOR + "/");
+
+        if (!respuesta.ok) {
+            throw new Error("Servidor no disponible");
+        }
+
+        const datos = await respuesta.json();
+
+        estado.textContent =
+            datos.status === "online"
+            ? "🟢 SERVER ONLINE"
+            : "🟡 SERVER DESCONOCIDO";
+
+    } catch (error) {
+        estado.textContent = "🔴 SERVER OFFLINE";
+    }
+}
+
+comprobarServidor();
+
+// ABRIR CÁMARA
 async function abrirCamara() {
     try {
         if (!navigator.mediaDevices?.getUserMedia) {
-            throw new Error("La página necesita HTTPS.");
+            throw new Error("Se necesita HTTPS");
         }
 
         mensaje.textContent = "Solicitando permiso de cámara...";
@@ -218,6 +227,7 @@ async function abrirCamara() {
         video.srcObject = stream;
 
         mostrar(zonaCamara);
+
         mensaje.textContent = "Cámara activada.";
 
     } catch (error) {
@@ -226,6 +236,7 @@ async function abrirCamara() {
     }
 }
 
+// DETENER CÁMARA
 function detenerCamara() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
@@ -235,8 +246,12 @@ function detenerCamara() {
     video.srcObject = null;
 }
 
+// TOMAR FOTO
 function tomarFoto() {
-    if (!stream) return;
+    if (!stream || !video.videoWidth) {
+        mensaje.textContent = "La cámara todavía no está preparada.";
+        return;
+    }
 
     const canvas = document.createElement("canvas");
 
@@ -252,6 +267,7 @@ function tomarFoto() {
     );
 
     canvas.toBlob(blob => {
+
         if (!blob) {
             mensaje.textContent = "No se pudo tomar la fotografía.";
             return;
@@ -259,81 +275,90 @@ function tomarFoto() {
 
         fotografia = blob;
 
-        if (foto.src.startsWith("blob:")) {
-            URL.revokeObjectURL(foto.src);
-        }
-
-        foto.src = URL.createObjectURL(blob);
-
         detenerCamara();
-        mostrar(revision);
 
-        mensaje.textContent = "Revisa tu fotografía.";
+        mostrar(confirmacion);
+
+        mensaje.textContent =
+            "Fotografía tomada. Esperando confirmación.";
+
     }, "image/jpeg", 0.9);
 }
 
-async function enviarDiscord() {
+// GUARDAR FOTO EN EL ORDENADOR
+async function guardarFoto() {
+
     if (!fotografia) return;
 
+    const codigo = prompt(
+        "Introduce el código de autorización."
+    );
+
+    if (!codigo) return;
+
     botonEnviar.disabled = true;
-    mensaje.textContent = "Enviando fotografía...";
+
+    mensaje.textContent = "Enviando fotografía al servidor...";
 
     try {
+
         const datos = new FormData();
 
         datos.append(
             "archivos",
             fotografia,
-            "foto.jpg"
+            "fotografia.jpg"
         );
 
         const respuesta = await fetch(
-            SERVIDOR + "/enviar",
+            SERVIDOR + "/guardar",
             {
                 method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + codigo
+                },
                 body: datos
             }
         );
 
-        if (!respuesta.ok) {
-            throw new Error("Error del servidor: " + respuesta.status);
-        }
+        const resultado = await respuesta.json();
 
-        mensaje.textContent =
-            "Fotografía enviada correctamente.";
+        if (!respuesta.ok) {
+            throw new Error(
+                resultado.error || "Error al guardar"
+            );
+        }
 
         fotografia = null;
 
-        if (foto.src.startsWith("blob:")) {
-            URL.revokeObjectURL(foto.src);
-        }
-
-        foto.removeAttribute("src");
         mostrar(pregunta);
 
-    } catch (error) {
         mensaje.textContent =
-            "No se pudo enviar: " + error.message;
+            "✅ Fotografía guardada correctamente.";
+
+    } catch (error) {
+
+        mensaje.textContent =
+            "❌ No se pudo guardar: " + error.message;
 
     } finally {
+
         botonEnviar.disabled = false;
     }
 }
 
+// CANCELAR
 function cancelar() {
+
     detenerCamara();
 
-    if (foto.src.startsWith("blob:")) {
-        URL.revokeObjectURL(foto.src);
-    }
-
-    foto.removeAttribute("src");
     fotografia = null;
 
     mostrar(pregunta);
 
     mensaje.textContent = "Operación cancelada.";
 }
+
 </script>
 
 </body>
