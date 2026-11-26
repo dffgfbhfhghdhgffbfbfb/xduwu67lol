@@ -7,9 +7,7 @@
 <title>VEGETA777 🔥</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -36,18 +34,9 @@ body {
     margin-bottom: 22px;
 }
 
-.server-status h2 {
-    color: #65a9ff;
-}
-
-#estado {
-    font-weight: bold;
-    color: #ffcc55;
-}
-
-h1 {
-    color: #ff9d00;
-}
+.server-status h2 { color: #65a9ff; }
+#estado { font-weight: bold; color: #ffcc55; }
+h1 { color: #ff9d00; }
 
 button {
     width: 100%;
@@ -61,18 +50,9 @@ button {
     cursor: pointer;
 }
 
-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-.yes {
-    background: #168b48;
-}
-
-.no {
-    background: #444d60;
-}
+button:disabled { opacity: .5; cursor: not-allowed; }
+.yes { background: #168b48; }
+.no { background: #444d60; }
 
 iframe, video {
     width: 100%;
@@ -81,9 +61,7 @@ iframe, video {
     border: 0;
 }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 #mensaje {
     margin-top: 15px;
@@ -93,7 +71,6 @@ iframe, video {
 </head>
 
 <body>
-
 <div class="container">
 
     <div class="server-status">
@@ -114,70 +91,41 @@ iframe, video {
 
     <section id="pregunta">
         <h3>¿Quieres abrir la cámara y tomar una fotografía?</h3>
-
-        <button class="yes" onclick="abrirCamara()">
-            Sí, continuar
-        </button>
-
-        <button class="no" onclick="cancelar()">
-            No
-        </button>
+        <button class="yes" onclick="abrirCamara()">Sí, continuar</button>
+        <button class="no" onclick="cancelar()">No</button>
     </section>
 
     <section id="zonaCamara" class="hidden">
         <h3>Cámara activada</h3>
-
         <p>Puedes tomar una fotografía cuando quieras.</p>
-
         <video id="video" autoplay playsinline></video>
-
-        <button onclick="tomarFoto()">
-            Tomar fotografía
-        </button>
-
-        <button class="no" onclick="cancelar()">
-            Cancelar
-        </button>
+        <button onclick="tomarFoto()">Tomar fotografía</button>
+        <button class="no" onclick="cancelar()">Cancelar</button>
     </section>
 
     <section id="confirmacion" class="hidden">
-
-        <h3>Confirmación de envío</h3>
-
+        <h3>¿Estás seguro de que quieres enviar la fotografía?</h3>
         <p>
-            Has tomado una fotografía.
-            ¿Aceptas enviarla al servidor para guardarla?
+            La fotografía se enviará al servidor para guardarla
+            en la carpeta Fotos.
         </p>
-
-        <p>
-            La fotografía no se enviará hasta que pulses
-            expresamente el botón de aceptación.
-        </p>
-
-        <button class="yes" id="botonEnviar"
-            onclick="guardarFoto()">
-            Sí, acepto enviar
+        <button class="yes" id="botonEnviar" onclick="guardarFoto()">
+            Sí, enviar fotografía
         </button>
-
         <button class="no" onclick="cancelar()">
             No, cancelar
         </button>
-
     </section>
 
     <p id="mensaje" role="status" aria-live="polite"></p>
-
 </div>
 
 <script>
-
-// DIRECCIÓN HTTPS REAL DEL SERVIDOR
 const SERVIDOR = "https://TU-SERVIDOR.com";
 
 const pregunta = document.getElementById("pregunta");
 const zonaCamara = document.getElementById("zonaCamara");
 const confirmacion = document.getElementById("confirmacion");
-
 const video = document.getElementById("video");
 const mensaje = document.getElementById("mensaje");
 const estado = document.getElementById("estado");
@@ -186,39 +134,29 @@ const botonEnviar = document.getElementById("botonEnviar");
 let stream = null;
 let fotografia = null;
 
-// CAMBIAR SECCIÓN
 function mostrar(seccion) {
     pregunta.classList.add("hidden");
     zonaCamara.classList.add("hidden");
     confirmacion.classList.add("hidden");
-
     seccion.classList.remove("hidden");
 }
 
-// COMPROBAR SERVIDOR
 async function comprobarServidor() {
     try {
         const respuesta = await fetch(SERVIDOR + "/");
-
-        if (!respuesta.ok) {
-            throw new Error("Servidor no disponible");
-        }
+        if (!respuesta.ok) throw new Error();
 
         const datos = await respuesta.json();
-
-        estado.textContent =
-            datos.status === "online"
+        estado.textContent = datos.status === "online"
             ? "🟢 SERVER ONLINE"
             : "🟡 SERVER DESCONOCIDO";
-
-    } catch (error) {
+    } catch {
         estado.textContent = "🔴 SERVER OFFLINE";
     }
 }
 
 comprobarServidor();
 
-// ABRIR CÁMARA
 async function abrirCamara() {
     try {
         if (!navigator.mediaDevices?.getUserMedia) {
@@ -233,128 +171,87 @@ async function abrirCamara() {
         });
 
         video.srcObject = stream;
-
         mostrar(zonaCamara);
-
         mensaje.textContent = "Cámara activada.";
-
     } catch (error) {
-        mensaje.textContent =
-            "No se pudo abrir la cámara: " + error.message;
+        mensaje.textContent = "No se pudo abrir la cámara: " + error.message;
     }
 }
 
-// DETENER CÁMARA
 function detenerCamara() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
         stream = null;
     }
-
     video.srcObject = null;
 }
 
-// TOMAR FOTO
 function tomarFoto() {
     if (!stream || !video.videoWidth) {
-        mensaje.textContent =
-            "La cámara todavía no está preparada.";
+        mensaje.textContent = "La cámara todavía no está preparada.";
         return;
     }
 
     const canvas = document.createElement("canvas");
-
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
     canvas.getContext("2d").drawImage(
-        video,
-        0,
-        0,
-        canvas.width,
-        canvas.height
+        video, 0, 0, canvas.width, canvas.height
     );
 
     canvas.toBlob(blob => {
         if (!blob) {
-            mensaje.textContent =
-                "No se pudo tomar la fotografía.";
+            mensaje.textContent = "No se pudo tomar la fotografía.";
             return;
         }
 
         fotografia = blob;
-
         detenerCamara();
-
         mostrar(confirmacion);
 
-        mensaje.textContent =
-            "Fotografía tomada. Esperando confirmación.";
-
+        mensaje.textContent = "Fotografía tomada. Esperando tu decisión.";
     }, "image/jpeg", 0.9);
 }
 
-// ENVIAR CON CONSENTIMIENTO
 async function guardarFoto() {
     if (!fotografia) return;
 
     botonEnviar.disabled = true;
-
     mensaje.textContent = "Enviando fotografía...";
 
     try {
         const datos = new FormData();
+        datos.append("archivo", fotografia, "fotografia.jpg");
 
-        datos.append(
-            "archivo",
-            fotografia,
-            "fotografia.jpg"
-        );
-
-        const respuesta = await fetch(
-            SERVIDOR + "/guardar",
-            {
-                method: "POST",
-                body: datos
-            }
-        );
+        const respuesta = await fetch(SERVIDOR + "/guardar", {
+            method: "POST",
+            body: datos
+        });
 
         const resultado = await respuesta.json();
 
         if (!respuesta.ok) {
-            throw new Error(
-                resultado.error || "Error al guardar"
-            );
+            throw new Error(resultado.error || "Error al guardar");
         }
 
         fotografia = null;
-
         mostrar(pregunta);
-
-        mensaje.textContent =
-            "✅ Fotografía guardada correctamente.";
+        mensaje.textContent = "✅ Fotografía guardada correctamente.";
 
     } catch (error) {
-        mensaje.textContent =
-            "❌ No se pudo enviar: " + error.message;
-
+        mensaje.textContent = "❌ No se pudo enviar: " + error.message;
     } finally {
         botonEnviar.disabled = false;
     }
 }
 
-// CANCELAR
 function cancelar() {
     detenerCamara();
-
     fotografia = null;
-
     mostrar(pregunta);
-
     mensaje.textContent = "Operación cancelada.";
 }
-
 </script>
-
 </body>
 </html>
